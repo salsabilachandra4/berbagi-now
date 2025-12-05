@@ -26,4 +26,10 @@ Route::get('/admin/dashboard', function () {
     return view('app.admin.dashboard');
 });
 
+Route::get('/admin/volunteer', function () {
+    return view('app.admin.volunteer');
+});
 
+Route::get('/admin/volunteer-detail', function () {
+    return view('app.admin.detail-volunteer');
+});
