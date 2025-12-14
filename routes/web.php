@@ -16,10 +16,6 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::get('/register', function () {
-return view('auth.register');
-});
-
 Route::get('/donate', function () {
     return view('app.donate');
 });
@@ -38,4 +34,8 @@ Route::get('/admin/volunteer', function () {
 
 Route::get('/admin/volunteer-detail', function () {
     return view('app.admin.detail-volunteer');
+});
+
+Route::get('/volunteer/dashboard', function () {
+    return view('app.volunteer.dashboard');
 });
