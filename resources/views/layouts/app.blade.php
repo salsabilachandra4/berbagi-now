@@ -16,11 +16,30 @@
         <div class="container d-flex col justify-content-between">
             <a class="fw-bold text-decoration-none text-black fs-4" href="/">BerbagiNow</a>
             <div class="d-flex w-auto gap-5">
-                <a class="text-decoration-none text-black" href="/#about">About</a>
-                <a class="text-decoration-none text-black" href="/#contact">Contact</a>
-                <a class="text-decoration-none text-black" href="/donate">Donate</a>
+                @auth
+                    @if (Auth::user()->role === 'admin')
+                        <a class="text-decoration-none text-black" href="/admin/dashboard">Dashboard</a>
+                        <a class="text-decoration-none text-black" href="/admin/volunteer">Volunteer</a>
+                        <a class="text-decoration-none text-black" href="/">Menu 3</a>
+                    @else
+                        <a class="text-decoration-none text-black" href="/volunteer/dashboard">Dashboard</a>
+                        <a class="text-decoration-none text-black" href="/">Menu 2</a>
+                        <a class="text-decoration-none text-black" href="/">Menu 3</a>
+                    @endif
+                @else
+                    <a class="text-decoration-none text-black" href="/#about">About</a>
+                    <a class="text-decoration-none text-black" href="/#contact">Contact</a>
+                    <a class="text-decoration-none text-black" href="/donate">Donate</a>
+                @endauth
             </div>
-            <a class="btn bg-black text-white" href="/login">Login</a>
+            @auth
+                <div class="d-flex gap-2">
+                    <a class="btn bg-black text-white" href="/logout">Logout</a>
+                    <a class="btn text-black border border-black" href="{{ url('profile/' . Auth::user()->id) }}">Profil</a>
+                </div>
+            @else
+                <a class="btn bg-black text-white" href="/login">Login</a>
+            @endauth
         </div>
     </nav>
     <div class="min-vh-100" style="height: 100%;">

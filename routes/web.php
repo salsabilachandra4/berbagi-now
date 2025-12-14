@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('app.landing');
 });
 
-Route::get('/login', function () {
-return view('auth.login');
-});
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'authenticate']);
+
+Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::get('/register', function () {
 return view('auth.register');
