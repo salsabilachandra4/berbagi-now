@@ -17,8 +17,8 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::get('/profile/{id}', [ProfileController::class, 'index']);
-Route::put('/profile/{id}', [ProfileController::class, 'update']);
+Route::get('/profile/{id}', [ProfileController::class, 'index'])->middleware("auth");
+Route::put('/profile/{id}', [ProfileController::class, 'update'])->middleware("auth");
 
 Route::get('/donate', function () {
     return view('app.donate');
@@ -27,19 +27,22 @@ Route::get('/donate', function () {
 Route::get('/donate-detail', function () {
     return view('app.donate-detail');
 });
-
-Route::get('/admin/dashboard', function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
     return view('app.admin.dashboard');
+    });
+
+    Route::get('/admin/volunteer', function () {
+        return view('app.admin.volunteer');
+    });
+
+    Route::get('/admin/volunteer-detail', function () {
+        return view('app.admin.detail-volunteer');
+    });
 });
 
-Route::get('/admin/volunteer', function () {
-    return view('app.admin.volunteer');
-});
-
-Route::get('/admin/volunteer-detail', function () {
-    return view('app.admin.detail-volunteer');
-});
-
-Route::get('/volunteer/dashboard', function () {
-    return view('app.volunteer.dashboard');
+Route::middleware(['auth', 'role:volunteer'])->group(function () {
+    Route::get('/volunteer/dashboard', function () {
+        return view('app.volunteer.dashboard');
+    });
 });
