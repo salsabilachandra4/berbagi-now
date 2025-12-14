@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,6 +16,9 @@ Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/logout', [LoginController::class, 'logout']);
+
+Route::get('/profile/{id}', [ProfileController::class, 'index']);
+Route::put('/profile/{id}', [ProfileController::class, 'update']);
 
 Route::get('/donate', function () {
     return view('app.donate');
