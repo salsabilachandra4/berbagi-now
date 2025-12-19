@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerController;
 use Illuminate\Support\Facades\Route;
@@ -22,18 +23,14 @@ Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/profile/{id}', [ProfileController::class, 'index'])->middleware("auth");
 Route::put('/profile/{id}', [ProfileController::class, 'update'])->middleware("auth");
 
-Route::get('/donate', function () {
-    return view('app.donate');
-});
+Route::get('/donate', [LandingController::class, 'index']);
+Route::get('/donate-detail/{id}', [LandingController::class, 'show']);
+Route::post('/donate-detail/{id}', [LandingController::class, 'store']);
 
-Route::get('/donate-detail', function () {
-    return view('app.donate-detail');
-});
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index']);
     Route::get('/admin/volunteer', [AdminController::class, 'volunteer']);
     Route::get('/admin/volunteer-detail/{id}', [AdminController::class, 'show']);
-
 });
 
 Route::middleware(['auth', 'role:volunteer'])->group(function () {
