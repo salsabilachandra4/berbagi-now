@@ -15,24 +15,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Ivan Gunawan</td>
-                        <td>11</td>
-                        <td><a href="/admin/volunteer-detail"><i class="fa-solid fa-eye"></i></a></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Ivin Guniwin</td>
-                        <td>8</td>
-                        <td><a href="/admin/volunteer-detail"><i class="fa-solid fa-eye"></i></a></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Ivun Gunuwun</td>
-                        <td>10</td>
-                        <td><a href="/admin/volunteer-detail"><i class="fa-solid fa-eye"></i></a></td>
-                    </tr>
+                    @if ($data->isEmpty())
+                        <tr>
+                            <td colspan="4" class="text-center">Tidak ada data.</td>
+                        </tr>
+                    @endif
+                    @foreach ($data as $volunteer)
+                        <tr>
+                            <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $volunteer->name }}</td>
+                            <td>{{ $volunteer->total_donation ?? 0 }}</td>
+                            <td><a href="/admin/volunteer-detail/{{ $volunteer->id }}" class="text-black"><i
+                                        class="fa-solid fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

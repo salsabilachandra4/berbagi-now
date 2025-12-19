@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
@@ -29,17 +30,10 @@ Route::get('/donate-detail', function () {
     return view('app.donate-detail');
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-    return view('app.admin.dashboard');
-    });
+    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+    Route::get('/admin/volunteer', [AdminController::class, 'volunteer']);
+    Route::get('/admin/volunteer-detail/{id}', [AdminController::class, 'show']);
 
-    Route::get('/admin/volunteer', function () {
-        return view('app.admin.volunteer');
-    });
-
-    Route::get('/admin/volunteer-detail', function () {
-        return view('app.admin.detail-volunteer');
-    });
 });
 
 Route::middleware(['auth', 'role:volunteer'])->group(function () {
