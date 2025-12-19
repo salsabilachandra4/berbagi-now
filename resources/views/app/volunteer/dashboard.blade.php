@@ -9,21 +9,21 @@
                 <div class="card-header border-black text-black fw-semibold">Jumlah Volunteer</div>
                 <div
                     class="card-body d-flex align-items-center rounded-bottom-4 text-black text-center justify-content-center">
-                    <span class="fs-title fw-semibold">8</span>
+                    <span class="fs-title fw-semibold">{{ $volunteer }}</span>
                 </div>
             </div>
             <div class="card border-black text-center rounded-4 mb-3" style="width: 18rem;">
                 <div class="card-header border-black text-black fw-semibold">Jumlah Donasi</div>
                 <div
                     class="card-body d-flex align-items-center rounded-bottom-4 text-white text-center justify-content-center">
-                    <span class="fs-title text-black fw-semibold">12</s>
+                    <span class="fs-title text-black fw-semibold">{{$donasi}}</s>
                 </div>
             </div>
             <div class="card border-black text-center rounded-4 mb-3" style="width: 18rem;">
                 <div class="card-header border-black text-black fw-semibold">Jumlah Donatur</div>
                 <div
                     class="card-body d-flex align-items-center rounded-bottom-4 text-white text-center justify-content-center">
-                    <span class="fs-title fw-semibold text-black">100</span>
+                    <span class="fs-title fw-semibold text-black">{{$donatur}}</span>
                 </div>
             </div>
         </div>

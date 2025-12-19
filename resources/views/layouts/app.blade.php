@@ -20,11 +20,9 @@
                     @if (Auth::user()->role === 'admin')
                         <a class="text-decoration-none text-black" href="/admin/dashboard">Dashboard</a>
                         <a class="text-decoration-none text-black" href="/admin/volunteer">Volunteer</a>
-                        <a class="text-decoration-none text-black" href="/">Menu 3</a>
                     @else
                         <a class="text-decoration-none text-black" href="/volunteer/dashboard">Dashboard</a>
-                        <a class="text-decoration-none text-black" href="/">Menu 2</a>
-                        <a class="text-decoration-none text-black" href="/">Menu 3</a>
+                        <a class="text-decoration-none text-black" href="/volunteer/donasi">Donasi</a>
                     @endif
                 @else
                     <a class="text-decoration-none text-black" href="/#about">About</a>
@@ -33,21 +31,33 @@
                 @endauth
             </div>
             @auth
-                <div class="d-flex gap-2">
-                    <a class="btn bg-black text-white" href="/logout">Logout</a>
-                    <a class="btn text-black border border-black" href="{{ url('profile/' . Auth::user()->id) }}">Profil</a>
-                </div>
-            @else
-                <a class="btn bg-black text-white" href="/login">Login</a>
-            @endauth
+                @if (Auth::user()->role === 'volunteer' && Auth::user()->expired_member === null)
+                    <div class="d-flex gap-2 align-items-center">
+                        <a class="btn bg-black text-white" href="/logout">Logout</a>
+                        <a class="btn text-black border border-black"
+                            href="{{ url('profile/' . Auth::user()->id) }}">Profil</a>
+                    </div>
+                @else
+                    <div class="d-flex gap-2 align-items-center">
+                        <a class="btn bg-black text-white" href="/logout">Logout</a>
+                        <a class="btn text-black border border-black"
+                            href="{{ url('profile/' . Auth::user()->id) }}">Profil</a>
+                    </div>
+                @endif
+            </div>
+        @else
+            <a class="btn bg-black text-white" href="/login">Login</a>
+        @endauth
         </div>
     </nav>
     <div class="min-vh-100" style="height: 100%;">
         <div class="container h-100 ">@yield('content')</div>
     </div>
+    </div>
     <footer class="border col-12 py-3 d-flex align-items-center justify-content-center">
         <span>© <b>BerbagiNow</b> 2025.</span>
     </footer>
+    @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
     </script>

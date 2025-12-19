@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'volunteer']);
             $table->string('image')->nullable();
+            $table->integer('total_donation')->nullable();
             $table->timestamp('expired_member')->nullable();
             $table->rememberToken();
             $table->timestamps();
