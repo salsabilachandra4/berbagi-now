@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VolunteerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,7 +43,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:volunteer'])->group(function () {
-    Route::get('/volunteer/dashboard', function () {
-        return view('app.volunteer.dashboard');
-    });
+    Route::get('/volunteer/dashboard', [VolunteerController::class, 'index']);
+    Route::get('/volunteer/donasi', [VolunteerController::class, 'donasi']);
+    Route::get('/volunteer/donasi/create', [VolunteerController::class, 'create']);
+    Route::post('/volunteer/donasi', [VolunteerController::class, 'store']);
+    Route::get('/volunteer/donasi-detail/{id}', [VolunteerController::class, 'donasiDetail']);
 });

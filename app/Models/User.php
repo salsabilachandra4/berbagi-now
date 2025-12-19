@@ -12,6 +12,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public function donasi()
+    {
+        return $this->hasMany(Donasi::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +28,8 @@ class User extends Authenticatable
         'password',
         'image',
         'role',
-        'expired_member'
+        'total_donation',
+        'expired_member',
     ];
 
     /**
