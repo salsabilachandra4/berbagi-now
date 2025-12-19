@@ -90,6 +90,7 @@ class VolunteerController extends Controller
                 }
 
                 Auth::user()->donasi()->create($validatedData);
+                Auth::user()->increment('total_donation');
 
                 return redirect('/volunteer/donasi')->with('success', 'Donasi berhasil disimpan!');
             } catch (Exception $e) {
@@ -115,7 +116,7 @@ class VolunteerController extends Controller
                 }
 
                 Auth::user()->donasi()->create($validatedData);
-                Auth::user()->update(['total_donation' => Auth::user()->donasi()->count()]);
+                Auth::user()->increment('total_donation');
 
                 return redirect('/volunteer/donasi')->with('success', 'Donasi berhasil disimpan!');
             }
