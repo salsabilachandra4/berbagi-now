@@ -1,0 +1,21 @@
+# Abaikan folder library (biarkan Docker yang install sendiri)
+node_modules
+vendor
+
+# Abaikan file konfigurasi lokal yang rahasia
+.env
+.env.backup
+phpunit.xml
+
+# Abaikan folder log dan cache yang tidak perlu
+storage/*.key
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+
+# Abaikan file Git dan Docker sendiri
+.git
+.gitignore
+Dockerfile
+.dockerignore
