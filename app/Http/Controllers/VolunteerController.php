@@ -26,12 +26,12 @@ class VolunteerController extends Controller
 
     public function donasi()
     {
-        $data = Donasi::where('user_id', Auth::user()->id)->get();
-        $total_donasi = DetailDonasi::whereIn('donasi_id', $data->pluck('id'))->count();
+        $donasi = Donasi::where('user_id', Auth::id())
+            ->withCount('detailDonasi')
+            ->get();
 
         return view('app.volunteer.donasi', [
-            'donasi' => $data,
-            'jumlah_donasi' => $total_donasi,
+            'donasi' => $donasi,
         ]);
     }
 
