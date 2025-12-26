@@ -29,9 +29,17 @@
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>{{ $item->judul }}</td>
-                            <td>{{ $jumlah_donasi }}</td>
-                            <td><a href="/volunteer/donasi-detail/{{ $item->id }}" class="text-black"><i
+                            <td>{{ $item->detail_donasi_count }}</td>
+                            <td class="d-flex gap-3">
+                                <a href="/volunteer/donasi-detail/{{ $item->id }}" class="text-black"><i
                                         class="fa-solid fa-eye"></i></a>
+                                <form action="/volunteer/donasi/{{ $item->id }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-link text-danger p-0 border-0">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
