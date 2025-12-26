@@ -36,6 +36,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:volunteer'])->group(function () {
     Route::get('/volunteer/dashboard', [VolunteerController::class, 'index']);
+    Route::delete('/volunteer/donasi/{id}', [VolunteerController::class, 'destroy']);
     Route::get('/volunteer/donasi', [VolunteerController::class, 'donasi']);
     Route::get('/volunteer/donasi/create', [VolunteerController::class, 'create']);
     Route::post('/volunteer/donasi', [VolunteerController::class, 'store']);

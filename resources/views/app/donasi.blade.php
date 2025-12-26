@@ -1,31 +1,50 @@
 @extends('layouts.app')
-@section('title', 'Donate')
+@section('title', 'Donasi')
 
 @section('content')
-    <div class="h-100 gap-5 row justify-content-center text-black py-5">
-        <h1 class="text-center">Donate Now</h1>
-        <div class="row col-12 justify-content-center align-items-center gap-5">
-            @if ($data->isEmpty())
-                <span class="text-center">Belum ada donasi.</span>
-            @endif
-            @foreach ($data as $donasi)
-                <div class="card" style="width: 18rem;">
-                    <a href="{{ url('donate-detail/' . $donasi->id) }}" class="text-decoration-none text-black">
-                        <img src="{{ asset('assets/landing_page.jpg') }}" class="card-img-top" alt="...">
-                        <div class="mb-2">
-                            <h5 class="card-title">{{ $donasi->judul }}</h5>
-                            <p class="card-text">{{ $donasi->deskripsi }}</p>
-                        </div>
-                        <div class="d-flex row">
-                            <span class="py-2 border-top fw-semibold">{{ $donasi->nomor_hp }}</span>
-                            <span class="py-2 border-top fw-semibold">{{ $donasi->bank }} a.n {{ $donasi->nama_rekening }}
-                                ({{ $donasi->nomor_rekening }})
-                            </span>
-                            <span class="py-2 border-top fw-semibold">Rp. {{ number_format($jumlah_donasi) }}</span>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+    <div class="h-100 gap-2 row justify-content-center text-black py-5">
+        <h1 class="text-center">Donasi</h1>
+        <div class="col-12 d-flex justify-content-end">
+            <a href="/volunteer/donasi/create" class="btn bg-black text-white">
+                Tambah Donasi
+            </a>
+        </div>
+        <div class="d-flex justify-content-between">
+            <table class="table table-striped border">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Judul</th>
+                        <th scope="col">Jumlah Donasi</th>
+                        <th scope="col">Lihat Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($donasi->isEmpty())
+                        <tr>
+                            <td colspan="4" class="text-center">Tidak ada data.</td>
+                        </tr>
+                    @endif
+                    @foreach ($donasi as $index => $item)
+                        <tr>
+                            <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $item->judul }}</td>
+                            <td>{{ $item->detail_donasi_count }}</td>
+                            <td class="d-flex gap-3">
+                                <a href="/volunteer/donasi-detail/{{ $item->id }}" class="text-black"><i
+                                        class="fa-solid fa-eye"></i></a>
+                                <form action="/volunteer/donasi/{{ $item->id }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-link text-danger p-0 border-0">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection

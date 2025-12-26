@@ -124,4 +124,12 @@ class VolunteerController extends Controller
             return redirect()->back()->with('failed', 'Member Basic hanya dapat open donasi 1 kali. Silakan upgrade ke member premium untuk membuka donasi lebih dari 1 kali.');
         }
     }
+
+    public function destroy(string $id)
+    {
+        $post = Donasi::findOrFail($id);
+        $post->delete();
+
+        return redirect('/volunteer/donasi')->with('success', 'Post deleted successfully!');
+    }
 }

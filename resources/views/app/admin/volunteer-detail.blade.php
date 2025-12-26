@@ -28,7 +28,7 @@
         <div class="d-flex row gap-5 col-12 justify-content-center py-5" id="about">
             @foreach ($data as $donasi)
                 <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('assets/landing_page.jpg') }}" class="card-img-top" alt="...">
+                    <img src="{{ asset('storage/' . $donasi->image) }}" class="card-img-top" alt="...">
                     <div class="mb-2">
                         <h5 class="card-title">{{ $donasi->judul }}</h5>
                         <p class="card-text">{{ $donasi->deskripsi }}</p>

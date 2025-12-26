@@ -31,7 +31,7 @@
                 <div class="mb-3 text-start">
                     <label for="exampleInputEmail1" class="form-label">Judul</label>
                     <input type="text" class="form-control" name="judul" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" required>
+                        placeholder="Masukkan Judul Donasi" aria-describedby="emailHelp" required>
                     @if ($errors->has('judul'))
                         <small class="text-danger">{{ $errors->first('judul') }}</small>
                     @endif
@@ -45,8 +45,8 @@
                 </div>
                 <div class="mb-3 text-start">
                     <label for="exampleInputEmail1" class="form-label">No Hp</label>
-                    <input type="text" inputmode="numeric" class="form-control" name="nomor_hp" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" required></input>
+                    <input type="tel" class="form-control" name="nomor_hp" id="nomor_hp" aria-describedby="hpHelp"
+                        pattern="[0-9]+" placeholder="08xxxxxxxxxx" required>
                     @if ($errors->has('nomor_hp'))
                         <small class="text-danger">{{ $errors->first('nomor_hp') }}</small>
                     @endif
@@ -67,15 +67,16 @@
                 <div class="mb-3 text-start">
                     <label for="exampleInputEmail1" class="form-label">Nama Rekening</label>
                     <input type="text" inputmode="numeric" class="form-control" name="nama_rekening"
-                        id="exampleInputEmail1" aria-describedby="emailHelp" required></input>
+                        placeholder="Masukkan nama rekening" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        required></input>
                     @if ($errors->has('nama_rekening'))
                         <small class="text-danger">{{ $errors->first('nama_rekening') }}</small>
                     @endif
                 </div>
                 <div class="mb-5 text-start">
                     <label for="exampleInputEmail1" class="form-label">No Rekening</label>
-                    <input type="text" inputmode="numeric" class="form-control" name="nomor_rekening"
-                        id="exampleInputEmail1" aria-describedby="emailHelp" required></input>
+                    <input type="text" inputmode="numeric" class="form-control" name="nomor_rekening" id="nomor_rekening"
+                        aria-describedby="emailHelp" pattern="[0-9]+" placeholder="Masukkan nomor rekening" required>
                     @if ($errors->has('nomor_rekening'))
                         <small class="text-danger">{{ $errors->first('nomor_rekening') }}</small>
                     @endif
