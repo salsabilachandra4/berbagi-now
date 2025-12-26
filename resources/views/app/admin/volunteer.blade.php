@@ -24,7 +24,7 @@
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>{{ $volunteer->name }}</td>
-                            <td>{{ $volunteer->total_donation ?? 0 }}</td>
+                           <td>{{ $jumlah_donasi[$volunteer->id] ?? 0 }}</td>
                             <td><a href="/admin/volunteer-detail/{{ $volunteer->id }}" class="text-black"><i
                                         class="fa-solid fa-eye"></i></a>
                             </td>

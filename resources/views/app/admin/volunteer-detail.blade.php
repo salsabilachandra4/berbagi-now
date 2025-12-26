@@ -8,7 +8,7 @@
             <li class="list-group-item fw-bold col-2">Nama</li>
             <li class="list-group-item col-4">{{ $user->name }}</li>
             <li class="list-group-item fw-bold col-2">Jumlah Open Donasi</li>
-            <li class="list-group-item col-4">{{ $user->total_donation }}</li>
+            <li class="list-group-item col-4">{{ $donasi }}</li>
         </ul>
         <ul class="list-group mb-5 list-group-horizontal">
             <li class="list-group-item fw-bold col-2">Status</li>
@@ -38,7 +38,7 @@
                         <span class="py-2 border-top fw-semibold">{{ $donasi->bank }} a.n {{ $donasi->nama_rekening }}
                             ({{ $donasi->nomor_rekening }})
                         </span>
-                        <span class="py-2 border-top fw-semibold">Rp. {{ number_format($jumlah_donasi) }}</span>
+                       <span class="py-2 border-top fw-semibold">Rp. {{ $jumlah_donasi[$donasi->id] ?? 0 }}</span>
                     </div>
                 </div>
             @endforeach

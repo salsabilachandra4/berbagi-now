@@ -24,9 +24,12 @@ class AdminController extends Controller
     public function volunteer()
     {
         $data = User::where('role', 'volunteer')->get();
-
+        $jumlah_donasi = Donasi::selectRaw('user_id, COUNT(id) as total')
+            ->groupBy('user_id')
+            ->pluck('total', 'user_id');
         return view('app.admin.volunteer', [
             'data' => $data,
+            'jumlah_donasi' => $jumlah_donasi,
         ]);
     }
 
@@ -34,11 +37,15 @@ class AdminController extends Controller
     {
         $user = User::find($id);
         $data = Donasi::where('user_id', $id)->get();
-        $jumlah_donasi = DetailDonasi::whereIn('donasi_id', $data->pluck('id'))->sum('nominal_donasi');
+     $donasi = Donasi::count();
+        $jumlah_donasi = DetailDonasi::selectRaw('donasi_id, SUM(nominal_donasi) as total_nominal')
+            ->groupBy('donasi_id')
+            ->get()->pluck('total_nominal', 'donasi_id');
 
         return view('app.admin.volunteer-detail', [
             'user' => $user,
             'data' => $data,
+            'donasi' => $donasi,
             'jumlah_donasi' => $jumlah_donasi,
         ]);
     }

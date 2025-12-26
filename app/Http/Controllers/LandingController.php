@@ -10,7 +10,9 @@ class LandingController extends Controller
     public function index()
     {
         $data = Donasi::all();
-        $jumlah_donasi = DetailDonasi::sum('nominal_donasi');
+         $jumlah_donasi = DetailDonasi::selectRaw('donasi_id, SUM(nominal_donasi) as total_nominal')
+            ->groupBy('donasi_id')
+            ->get()->pluck('total_nominal', 'donasi_id');
 
         return view('app.donasi', [
             'data' => $data,
