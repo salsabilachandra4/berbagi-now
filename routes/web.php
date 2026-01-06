@@ -8,10 +8,15 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerController;
+use App\Http\Controllers\Auth\SocialiteController;
 
 Route::get('/', function () {
     return view('app.landing');
 });
+
+// --- ROUTE LOGIN GOOGLE ---
+Route::get('/auth/{provider}/redirect', [SocialiteController::class, 'redirect'])->name('socialite.redirect');
+Route::get('/auth/{provider}/callback', [SocialiteController::class, 'callback'])->name('socialite.callback');
 
 // --- ROUTE AUTH BIASA ---
 Route::get('/login', [LoginController::class, 'index'])->name('login');
