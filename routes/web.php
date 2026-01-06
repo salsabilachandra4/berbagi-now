@@ -9,9 +9,13 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Models\Donation; // Menambahkan import model agar tidak error
 
+// --- HALAMAN UTAMA (WELCOME) ---
 Route::get('/', function () {
-    return view('app.landing');
+    // Mengambil data donasi terbaru agar gambar muncul di halaman welcome
+    $donations = Donation::latest()->get(); 
+    return view('welcome', compact('donations'));
 });
 
 // --- ROUTE LOGIN GOOGLE ---
