@@ -28,6 +28,7 @@ class User extends Authenticatable
         'password',
         'image',
         'role',
+        'google_id', // Tambahkan ini agar bisa menyimpan ID dari Google
         'total_donation',
         'expired_member',
     ];

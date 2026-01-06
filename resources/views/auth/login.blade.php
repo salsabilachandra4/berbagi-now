@@ -23,9 +23,27 @@
                         <small class="text-danger">{{ $errors->first('password') }}</small>
                     @endif
                 </div>
-                <button type="submit" class="btn bg-black rounded-pill py-3 text-white">Submit</button>
+
+                <div class="d-grid gap-3">
+                    <button type="submit" class="btn bg-black rounded-pill py-3 text-white">Submit</button>
+
+                    <div class="position-relative my-2">
+                        <hr>
+                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted" style="font-size: 0.8rem;">ATAU</span>
+                    </div>
+
+                    {{-- Tombol Google Baru --}}
+                    <div class="mt-2">
+                        <a href="{{ route('socialite.redirect', 'google') }}"
+                           class="btn btn-outline-secondary w-100 py-3 rounded-pill d-flex align-items-center justify-content-center gap-2 font-semibold shadow-sm text-dark">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20">
+                            Login with Google
+                        </a>
+                    </div>
+                </div>
             </form>
-            <span class="text-dark">
+
+            <span class="text-dark mt-4">
                 Belum punya akun? <a class="text-black text-decoration-none fw-semibold" href="/register">Daftar.</a>
             </span>
         </div>

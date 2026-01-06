@@ -1,49 +1,55 @@
-# Tahap 1: Menggunakan image PHP resmi dengan FPM
-FROM php:8.2-fpm
+# Gunakan image PHP Apache
+FROM php:8.3-apache
 
-# Menetapkan folder kerja di dalam kontainer
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-# Instal dependensi sistem yang diperlukan oleh Laravel
+# 1. Install Library System + Node.js (TAMBAHAN PENTING)
+# Kita perlu Node.js untuk compile CSS (npm run build)
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
     git \
     curl \
+    zip \
+    unzip \
+    libonig-dev \
+    libxml2-dev \
     libzip-dev \
-    libonig-dev
+    openssh-server \
+    gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && docker-php-ext-install pdo pdo_mysql zip mbstring \
+    && a2enmod rewrite \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Bersihkan cache sistem untuk mengurangi ukuran image
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Setup Apache Document Root
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
-# Instal ekstensi PHP yang dibutuhkan (MySQL, GD, mbstring, zip)
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install gd
+# 2. Install Dependency PHP (Composer)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
 
-# Instal Composer secara otomatis dari image resmi Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# 3. Copy Semua Source Code
+COPY . .
 
-# Salin seluruh kodingan aplikasi ke dalam kontainer
-COPY . /var/www
+# 4. BUILD ASSETS (BAGIAN YANG HILANG SEBELUMNYA)
+# Ini akan membuat folder public/build yang berisi CSS/JS
+RUN npm install
+RUN npm run build
 
-# Jalankan perintah composer install untuk menginstal vendor
-# (Opsional: tambahkan --no-dev untuk produksi)
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+# 5. Permission & Entrypoint
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
-# Berikan izin akses (permissions) agar Laravel bisa menulis log dan cache
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Port yang digunakan oleh PHP-FPM (default 9000)
-# Namun jika untuk Azure Web App, kita biasanya menggunakan port 80/8080
-EXPOSE 8080
-
-# Jalankan server bawaan PHP untuk testing (atau ganti dengan perintah Nginx di produksi)
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+EXPOSE 80
+ENTRYPOINT ["entrypoint.sh"]
