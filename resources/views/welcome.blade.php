@@ -28,68 +28,68 @@
         <div class="flex items-center justify-center w-full lg:grow">
             <main class="w-full lg:max-w-5xl">
                 
-                <div class="mb-8">
-                    <h1 class="text-2xl font-medium mb-1">Daftar Donasi</h1>
+                <div class="mb-8 text-center md:text-left">
+                    <h1 class="text-3xl font-bold mb-1">Donate Now</h1>
                     <p class="text-[#706f6c] dark:text-[#A1A09A]">Bantu sesama melalui program donasi di bawah ini.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @forelse($donations as $donation)
-                        <div class="flex flex-col lg:flex-row bg-white dark:bg-[#161615] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-lg overflow-hidden border border-[#e3e3e0] dark:border-[#3E3E3A]">
+                        <div class="flex flex-col bg-white dark:bg-[#161615] shadow-sm rounded-xl overflow-hidden border border-[#e3e3e0] dark:border-[#3E3E3A]">
                             
-                            <div class="lg:w-48 h-48 lg:h-auto shrink-0 bg-gray-100 relative">
+                            <div class="w-full aspect-video bg-gray-100 relative overflow-hidden">
                                 @if($donation->image)
-                                    {{-- Menggunakan asset storage untuk memanggil gambar yang diupload --}}
+                                    {{-- Mengambil gambar dari public/storage --}}
                                     <img src="{{ asset('storage/' . $donation->image) }}" 
                                          class="w-full h-full object-cover" 
                                          alt="{{ $donation->title }}"
-                                         onerror="this.onerror=null;this.src='https://placehold.co/400x400?text=Gambar+Tidak+Ditemukan';">
+                                         onerror="this.src='https://placehold.co/600x400?text=Gambar+Tidak+Ditemukan'">
                                 @else
-                                    <div class="flex items-center justify-center h-full text-gray-400 text-xs italic">No Image</div>
+                                    <div class="flex items-center justify-center h-full text-gray-400 text-sm italic">
+                                        No Image Uploaded
+                                    </div>
                                 @endif
                             </div>
 
                             <div class="p-6 flex flex-col justify-between flex-1">
-                                <div>
-                                    <h2 class="font-medium text-lg mb-2 dark:text-white">{{ $donation->title }}</h2>
-                                    <p class="text-[13px] text-[#706f6c] dark:text-[#A1A09A] leading-relaxed line-clamp-2">
-                                        {{ $donation->description }}
+                                <div class="mb-4">
+                                    <h2 class="font-bold text-xl mb-2 dark:text-white">{{ $donation->title }}</h2>
+                                    <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] leading-relaxed">
+                                        {{ $donation->description ?? '-' }}
                                     </p>
                                 </div>
 
-                                <div class="mt-4 pt-4 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
-                                    <div class="mb-2">
-                                        <p class="text-[11px] text-[#706f6c] uppercase tracking-wider">Dana Terkumpul</p>
-                                        {{-- Menggunakan current_amount (atau 0 jika belum ada donasi masuk) --}}
-                                        <p class="text-[16px] font-bold text-green-600">
+                                <div class="space-y-3 border-t border-[#f0f0f0] dark:border-[#2a2a29] pt-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-500 uppercase font-semibold">Terkumpul</span>
+                                        {{-- Menggunakan null coalescing ?? 0 agar muncul angka 0 jika data kosong --}}
+                                        <span class="text-lg font-bold text-green-600">
                                             Rp {{ number_format($donation->current_amount ?? 0, 0, ',', '.') }}
-                                        </p>
+                                        </span>
                                     </div>
-                                    
-                                    <div class="flex justify-between items-end">
-                                        <div>
-                                            <p class="text-[10px] text-[#706f6c] uppercase italic">Target: Rp {{ number_format($donation->amount, 0, ',', '.') }}</p>
-                                            <p class="text-[11px] text-blue-600 mt-1 font-medium">{{ $donation->bank_info }}</p>
-                                        </div>
-                                        
-                                        <a href="{{ route('login') }}" class="text-[11px] bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 transition-all">
-                                            Donasi
-                                        </a>
+
+                                    <div class="bg-gray-50 dark:bg-[#1c1c1b] p-3 rounded-lg text-[11px] text-[#555] dark:text-gray-400">
+                                        <p class="mb-1 font-mono tracking-tight">{{ $donation->bank_info }}</p>
+                                        <p class="font-bold text-[#f53003]">Target: Rp {{ number_format($donation->amount, 0, ',', '.') }}</p>
                                     </div>
+
+                                    <a href="{{ route('login') }}" class="block w-full text-center bg-black text-white dark:bg-white dark:text-black py-2.5 rounded-lg font-bold text-sm hover:opacity-80 transition-opacity">
+                                        Donasi Sekarang
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     @empty
-                        <div class="col-span-full p-12 text-center border-2 border-dashed border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg">
-                            <p class="text-[#706f6c]">Belum ada donasi tersedia saat ini.</p>
+                        <div class="col-span-full p-20 text-center border-2 border-dashed border-[#e3e3e0] rounded-2xl">
+                            <p class="text-gray-500 italic">Belum ada data donasi yang tersedia.</p>
                         </div>
                     @endforelse
                 </div>
             </main>
         </div>
 
-        <footer class="py-12 text-[13px] text-[#706f6c] dark:text-gray-500">
-            &copy; {{ date('Y') }} BerbagiNow - Azure Production Mode
+        <footer class="py-10 text-[11px] text-[#706f6c] uppercase tracking-widest">
+            &copy; {{ date('Y') }} BerbagiNow - Azure Production
         </footer>
     </body>
 </html>
