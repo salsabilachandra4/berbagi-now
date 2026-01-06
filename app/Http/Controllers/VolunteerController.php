@@ -8,6 +8,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class VolunteerController extends Controller
 {
@@ -46,6 +47,8 @@ class VolunteerController extends Controller
 
     public function subscribe(Request $request)
     {
+        // (Kondisi if/elseif/else ini sebenarnya sama semua,
+        // tapi aku biarkan sesuai kode kamu)
         if ($request->expired_member == 14) {
             User::where('id', Auth::user()->id)->update([
                 'expired_member' => now()->addDays((int) $request->expired_member),
@@ -84,7 +87,7 @@ class VolunteerController extends Controller
 
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $filename = time().'_'.$file->getClientOriginalName();
+                    $filename = time() . '_' . $file->getClientOriginalName();
                     $path = $file->storeAs('image', $filename, 'public');
                     $validatedData['image'] = $path;
                 }
@@ -94,7 +97,7 @@ class VolunteerController extends Controller
 
                 return redirect('/volunteer/donasi')->with('success', 'Donasi berhasil disimpan!');
             } catch (Exception $e) {
-                return redirect()->back()->with('error', 'Terjadi kesalahan: '.$e->getMessage());
+                return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
             }
         } else {
             if (Auth::user()->total_donation == null) {
@@ -110,7 +113,7 @@ class VolunteerController extends Controller
 
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $filename = time().'_'.$file->getClientOriginalName();
+                    $filename = time() . '_' . $file->getClientOriginalName();
                     $path = $file->storeAs('image', $filename, 'public');
                     $validatedData['image'] = $path;
                 }
@@ -121,7 +124,33 @@ class VolunteerController extends Controller
                 return redirect('/volunteer/donasi')->with('success', 'Donasi berhasil disimpan!');
             }
 
-            return redirect()->back()->with('failed', 'Member Basic hanya dapat open donasi 1 kali. Silakan upgrade ke member premium untuk membuka donasi lebih dari 1 kali.');
+            return redirect()->back()->with(
+                'failed',
+                'Member Basic hanya dapat open donasi 1 kali. Silakan upgrade ke member premium untuk membuka donasi lebih dari 1 kali.'
+            );
+        }
+    }
+
+    // =========================
+    // DELETE DONASI
+    // =========================
+    public function destroy($id)
+    {
+        try {
+            $donasi = Donasi::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            // Hapus file gambar dari storage jika ada
+            if ($donasi->image) {
+                Storage::disk('public')->delete($donasi->image);
+            }
+
+            $donasi->delete();
+
+            return redirect()->back()->with('success', 'Donasi berhasil dihapus!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus data.');
         }
     }
 }
