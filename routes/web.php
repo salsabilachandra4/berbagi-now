@@ -9,7 +9,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\Auth\SocialiteController;
-use App\Models\Donation; // Menambahkan import model agar tidak error
+use App\Models\Donasi; // Menambahkan import model agar tidak error
 
 // --- HALAMAN UTAMA (WELCOME) ---
 Route::get('/', function () {
