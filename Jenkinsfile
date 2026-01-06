@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         // Konfigurasi ACR Anda
-        REGISTRY_URL = 'fitmealapp.azurecr.io'
-        IMAGE_NAME   = 'fitmeal'
+        REGISTRY_URL = 'berbagiapp.azurecr.io'
+        IMAGE_NAME   = 'berbaginow'
 
         // ID ini nanti kita buat di Dashboard Jenkins
-        DOCKER_CRED_ID = 'fitmealapp.azurecr.io'
+        DOCKER_CRED_ID = 'berbagiapp.azurecr.io'
     }
 
     stages {
