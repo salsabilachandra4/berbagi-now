@@ -2,14 +2,18 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'jihannatasya/berbagi-now'
-        REGISTRY = 'https://index.docker.io/v1/'
-        REGISTRY_CREDENTIALS = 'dockerhub-credentials'
+        // Konfigurasi ACR Anda
+        REGISTRY_URL = 'fitmealapp.azurecr.io'
+        IMAGE_NAME   = 'fitmeal'
+
+        // ID ini nanti kita buat di Dashboard Jenkins
+        DOCKER_CRED_ID = 'fitmealapp.azurecr.io'
     }
 
     stages {
         stage('Checkout') {
             steps {
+                // Langkah 1: Tarik kode terbaru dari GitHub
                 checkout scm
             }
         }
@@ -17,19 +21,33 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
+                    echo '--- Building Docker Image ---'
+                    // Build image dengan tag 'latest' dan nomor build (versi)
+                    bat "docker build -t $REGISTRY_URL/$IMAGE_NAME:latestjens ."
+                    bat "docker build -t $REGISTRY_URL/$IMAGE_NAME:${BUILD_NUMBER} ."
                 }
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Login to ACR') {
             steps {
                 script {
-                    docker.withRegistry(REGISTRY, REGISTRY_CREDENTIALS) {
-                        def tag = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
-                        docker.image(tag).push()
-                        docker.image(tag).push('latest')
+                    echo '--- Logging in to Azure Container Registry ---'
+                    // Mengambil username/password aman dari Jenkins Credentials
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CRED_ID, usernameVariable: 'ACR_USER', passwordVariable: 'ACR_PASS')]) {
+                        bat "docker login $REGISTRY_URL -u $ACR_USER -p $ACR_PASS"
                     }
+                }
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                script {
+                    echo '--- Pushing Image to ACR ---'
+                    // Push ke Azure
+                    bat "docker push $REGISTRY_URL/$IMAGE_NAME:latestjens"
+                    bat "docker push $REGISTRY_URL/$IMAGE_NAME:${BUILD_NUMBER}"
                 }
             }
         }
@@ -37,7 +55,10 @@ pipeline {
 
     post {
         always {
-            echo 'Build berbagi-now selesai'
+            // Bersihkan sampah image di server Jenkins agar storage tidak penuh
+            bat "docker logout $REGISTRY_URL"
+            bat "docker rmi $REGISTRY_URL/$IMAGE_NAME:latestjens || true"
+            bat "docker rmi $REGISTRY_URL/$IMAGE_NAME:${BUILD_NUMBER} || true"
         }
     }
 }
