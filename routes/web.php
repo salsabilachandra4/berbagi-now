@@ -9,12 +9,11 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\Auth\SocialiteController;
-use App\Models\Donasi; // Menambahkan import model agar tidak error
+use App\Models\Donasi;
 
 // --- HALAMAN UTAMA (WELCOME) ---
 Route::get('/', function () {
-    // Mengambil data donasi terbaru agar gambar muncul di halaman welcome
-    $donations = Donation::latest()->get(); 
+    $donations = Donasi::latest()->get();
     return view('welcome', compact('donations'));
 });
 
@@ -29,7 +28,7 @@ Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
-// --- LOGIKA REDIRECT DASHBOARD (WAJIB ADA AGAR TEMBUS) ---
+// --- LOGIKA REDIRECT DASHBOARD ---
 Route::get('/dashboard', function () {
     if (auth()->user()->role == 'admin') {
         return redirect('/admin/dashboard');
@@ -40,6 +39,7 @@ Route::get('/dashboard', function () {
 // --- ROUTE PROFILE & DONATE ---
 Route::get('/profile/{id}', [ProfileController::class, 'index'])->middleware("auth");
 Route::put('/profile/{id}', [ProfileController::class, 'update'])->middleware("auth");
+
 Route::get('/donate', [LandingController::class, 'index']);
 Route::get('/donate-detail/{id}', [LandingController::class, 'show']);
 Route::post('/donate-detail/{id}', [LandingController::class, 'store']);
@@ -58,7 +58,9 @@ Route::middleware(['auth', 'role:volunteer'])->group(function () {
     Route::get('/volunteer/donasi/create', [VolunteerController::class, 'create']);
     Route::post('/volunteer/donasi', [VolunteerController::class, 'store']);
     Route::get('/volunteer/donasi-detail/{id}', [VolunteerController::class, 'donasiDetail']);
-    Route::delete('/volunteer/donasi/{id}', [VolunteerController::class, 'destroy'])->middleware('auth');
+
+    // DELETE DONASI (baru)
+    Route::delete('/volunteer/donasi/{id}', [VolunteerController::class, 'destroy']);
 });
 
 // --- PAYMENT ---
