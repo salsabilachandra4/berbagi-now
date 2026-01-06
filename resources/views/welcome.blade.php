@@ -37,11 +37,13 @@
                     @forelse($donations as $donation)
                         <div class="flex flex-col lg:flex-row bg-white dark:bg-[#161615] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-lg overflow-hidden border border-[#e3e3e0] dark:border-[#3E3E3A]">
                             
-                            <div class="lg:w-48 h-48 lg:h-auto shrink-0 bg-gray-100">
+                            <div class="lg:w-48 h-48 lg:h-auto shrink-0 bg-gray-100 relative">
                                 @if($donation->image)
+                                    {{-- Menggunakan asset storage untuk memanggil gambar yang diupload --}}
                                     <img src="{{ asset('storage/' . $donation->image) }}" 
                                          class="w-full h-full object-cover" 
-                                         alt="{{ $donation->title }}">
+                                         alt="{{ $donation->title }}"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/400x400?text=Gambar+Tidak+Ditemukan';">
                                 @else
                                     <div class="flex items-center justify-center h-full text-gray-400 text-xs italic">No Image</div>
                                 @endif
@@ -54,11 +56,26 @@
                                         {{ $donation->description }}
                                     </p>
                                 </div>
+
                                 <div class="mt-4 pt-4 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
-                                    <p class="text-[14px] font-bold text-[#f53003]">
-                                        Target: Rp {{ number_format($donation->amount, 0, ',', '.') }}
-                                    </p>
-                                    <p class="text-[11px] text-[#706f6c] dark:text-gray-500 mt-1 italic">{{ $donation->bank_info }}</p>
+                                    <div class="mb-2">
+                                        <p class="text-[11px] text-[#706f6c] uppercase tracking-wider">Dana Terkumpul</p>
+                                        {{-- Menggunakan current_amount (atau 0 jika belum ada donasi masuk) --}}
+                                        <p class="text-[16px] font-bold text-green-600">
+                                            Rp {{ number_format($donation->current_amount ?? 0, 0, ',', '.') }}
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-end">
+                                        <div>
+                                            <p class="text-[10px] text-[#706f6c] uppercase italic">Target: Rp {{ number_format($donation->amount, 0, ',', '.') }}</p>
+                                            <p class="text-[11px] text-blue-600 mt-1 font-medium">{{ $donation->bank_info }}</p>
+                                        </div>
+                                        
+                                        <a href="{{ route('login') }}" class="text-[11px] bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 transition-all">
+                                            Donasi
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +89,7 @@
         </div>
 
         <footer class="py-12 text-[13px] text-[#706f6c] dark:text-gray-500">
-            &copy; {{ date('Y') }} BerbagiNow - Managed Production
+            &copy; {{ date('Y') }} BerbagiNow - Azure Production Mode
         </footer>
     </body>
 </html>
