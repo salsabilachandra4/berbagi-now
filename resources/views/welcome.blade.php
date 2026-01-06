@@ -39,38 +39,37 @@
                             
                             <div class="w-full aspect-video bg-gray-100 relative overflow-hidden">
                                 @if($donation->image)
-                                    {{-- Mengambil gambar dari public/storage --}}
                                     <img src="{{ asset('storage/' . $donation->image) }}" 
                                          class="w-full h-full object-cover" 
-                                         alt="{{ $donation->title }}"
+                                         alt="{{ $donation->judul }}"
                                          onerror="this.src='https://placehold.co/600x400?text=Gambar+Tidak+Ditemukan'">
                                 @else
-                                    <div class="flex items-center justify-center h-full text-gray-400 text-sm italic">
-                                        No Image Uploaded
-                                    </div>
+                                    <div class="flex items-center justify-center h-full text-gray-400 text-sm italic">No Image</div>
                                 @endif
                             </div>
 
                             <div class="p-6 flex flex-col justify-between flex-1">
                                 <div class="mb-4">
-                                    <h2 class="font-bold text-xl mb-2 dark:text-white">{{ $donation->title }}</h2>
-                                    <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] leading-relaxed">
-                                        {{ $donation->description ?? '-' }}
+                                    {{-- Menggunakan field 'judul' dari Controller --}}
+                                    <h2 class="font-bold text-xl mb-2 dark:text-white">{{ $donation->judul }}</h2>
+                                    <p class="text-sm text-[#706f6c] dark:text-[#A1A09A] leading-relaxed line-clamp-2">
+                                        {{ $donation->deskripsi }}
                                     </p>
                                 </div>
 
                                 <div class="space-y-3 border-t border-[#f0f0f0] dark:border-[#2a2a29] pt-4">
                                     <div class="flex justify-between items-center">
                                         <span class="text-xs text-gray-500 uppercase font-semibold">Terkumpul</span>
-                                        {{-- Menggunakan null coalescing ?? 0 agar muncul angka 0 jika data kosong --}}
+                                        {{-- Menampilkan Rp 0 sesuai permintaan --}}
                                         <span class="text-lg font-bold text-green-600">
-                                            Rp {{ number_format($donation->current_amount ?? 0, 0, ',', '.') }}
+                                            Rp 0
                                         </span>
                                     </div>
 
                                     <div class="bg-gray-50 dark:bg-[#1c1c1b] p-3 rounded-lg text-[11px] text-[#555] dark:text-gray-400">
-                                        <p class="mb-1 font-mono tracking-tight">{{ $donation->bank_info }}</p>
-                                        <p class="font-bold text-[#f53003]">Target: Rp {{ number_format($donation->amount, 0, ',', '.') }}</p>
+                                        <p class="mb-1 font-mono tracking-tight">Bank: {{ $donation->bank }}</p>
+                                        <p class="mb-1 uppercase">A.n: {{ $donation->nama_rekening }}</p>
+                                        <p class="font-bold text-blue-600">No. Rek: {{ $donation->nomor_rekening }}</p>
                                     </div>
 
                                     <a href="{{ route('login') }}" class="block w-full text-center bg-black text-white dark:bg-white dark:text-black py-2.5 rounded-lg font-bold text-sm hover:opacity-80 transition-opacity">
