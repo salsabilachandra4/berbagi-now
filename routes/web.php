@@ -58,6 +58,7 @@ Route::middleware(['auth', 'role:volunteer'])->group(function () {
     Route::get('/volunteer/donasi/create', [VolunteerController::class, 'create']);
     Route::post('/volunteer/donasi', [VolunteerController::class, 'store']);
     Route::get('/volunteer/donasi-detail/{id}', [VolunteerController::class, 'donasiDetail']);
+    Route::delete('/volunteer/donasi/{id}', [VolunteerController::class, 'destroy'])->middleware('auth');
 });
 
 // --- PAYMENT ---
